@@ -14,6 +14,8 @@ import com.udacity.sandwichclub.utils.JsonUtils;
 
 import org.json.JSONArray;
 
+import java.util.List;
+
 public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSITION = "extra_position";
@@ -28,7 +30,7 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        ImageView ingredientsIv = findViewById(R.id.image_iv);
+//        ImageView ingredientsIv = findViewById(R.id.image_iv);
 
         Intent intent = getIntent();
         if (intent == null) {
@@ -50,10 +52,11 @@ public class DetailActivity extends AppCompatActivity {
             closeOnError();
             return;
         }
-        populateUI();
+        initvies();
+        populateUI(sandwich);
         Picasso.with(this)
                 .load(sandwich.getImage())
-                .into(ingredientsIv);
+                .into(imageView);
 
         setTitle(sandwich.getMainName());
     }
@@ -63,8 +66,55 @@ public class DetailActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
-    private void populateUI() {
+    private void initvies(){
+        descriptionTV = findViewById(R.id.description_tv);
+        originTV = findViewById(R.id.origin_tv);
+        ingredientsTV = findViewById(R.id.ingredients_tv);
+        alsoKnownTV = findViewById(R.id.also_known_tv);
+        imageView = findViewById(R.id.image_iv);
 
+    }
+
+    private void populateUI(Sandwich sandwich) {
+
+        if(sandwich.getDescription().isEmpty() || sandwich.getDescription().equals(" ")) {
+            descriptionTV.setText(getResources().getString(R.string.not_avail));
+        } else{
+            descriptionTV.setText(sandwich.getDescription());
+        }
+        if (sandwich.getPlaceOfOrigin().isEmpty() || sandwich.getPlaceOfOrigin().equals(" ")) {
+            originTV.setText(getResources().getString(R.string.not_avail));
+        } else {
+            originTV.setText(sandwich.getPlaceOfOrigin());
+        }
+//        if(sandwich.getIngredients().isEmpty() || sandwich.getIngredients().equals(" ")) {
+//            ingredientsTV.setText(getResources().getString(R.string.not_avail));
+//        } else{
+//            ingredientsTV.setText(sandwich.getIngredients().toString());
+//        }
+//        if(sandwich.getAlsoKnownAs().isEmpty() || sandwich.getAlsoKnownAs().equals(" ")) {
+//            alsoKnownTV.setText(getResources().getString(R.string.not_avail));
+//        } else{
+//            alsoKnownTV.setText(sandwich.getAlsoKnownAs().toString());
+//        }
+        settingList(sandwich.getIngredients(),ingredientsTV);
+        settingList(sandwich.getAlsoKnownAs(),alsoKnownTV);
+
+    }
+
+    private void settingList(List<String> list, TextView textView) {
+        if (list.isEmpty()) {
+            textView.setText(getResources().getString(R.string.not_avail));
+            return;
+        }
+        StringBuilder data = new StringBuilder();
+        for (int i = 0; i < list.size(); i++) {
+            data.append(list.get(i));
+            if (i != list.size() - 1)
+                data.append(",");
+        }
+
+        textView.setText(data.toString().replace(",", "\n"));
 
     }
 }
