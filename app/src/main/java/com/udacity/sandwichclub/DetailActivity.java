@@ -3,6 +3,7 @@ package com.udacity.sandwichclub;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -103,6 +104,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void settingList(List<String> list, TextView textView) {
+        String textUtils;
         if (list.isEmpty()) {
             textView.setText(getResources().getString(R.string.not_avail));
             return;
@@ -110,11 +112,11 @@ public class DetailActivity extends AppCompatActivity {
         StringBuilder data = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {
             data.append(list.get(i));
-            if (i != list.size() - 1)
-                data.append(",");
+//            if (i != list.size() - 1)
+//                data.append(",");
         }
-
-        textView.setText(data.toString().replace(",", "\n"));
+        textUtils = TextUtils.join("\n",list);
+        textView.setText(textUtils);
 
     }
 }
