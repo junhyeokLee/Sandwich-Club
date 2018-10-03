@@ -1,5 +1,6 @@
 package com.udacity.sandwichclub;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -31,14 +32,16 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                launchDetailActivity(position);
+                launchDetailActivity(position,view);
             }
         });
     }
 
-    private void launchDetailActivity(int position) {
+    private void launchDetailActivity(int position, View view) {
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra(DetailActivity.EXTRA_POSITION, position);
-        startActivity(intent);
+        view.setTransitionName(String.valueOf(position));
+        ActivityOptions transitionActivityOption = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,view,view.getTransitionName());
+        startActivity(intent,transitionActivityOption.toBundle());
     }
 }
